@@ -1,0 +1,542 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+
+    --light-gray: rgb(95, 95, 95);
+    --dark-gray: rgb(51, 51, 51);
+    --light-yellow: #f5c8c8;
+    --light-orange:#dda0a0;
+    --orange:#ca665f;
+    --dark-orange:rgb(139, 72, 72);
+    
+    --translucent-white: rgba(255, 255, 255, 0.7);
+
+    --normal-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    --blur-filter: blur(8px);
+
+    --main-orange-color: #f08923;
+    --heavy-grey: #7a7a7a;
+    --light-grey: #cdcdcd;
+    --background-white: #ffffff;
+    --transparent-white: rgba(255, 255, 255, 0.7);
+    --text-color-white: #ffffff;
+    --text-color-grey: #54595F;
+    --text-color-black: black;
+}
+
+html{
+  height: 100vh;
+}
+
+#propiedades-container {
+  visibility: visible;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  bottom: 1.5rem; 
+  right: 3.5rem;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5); /* Añade un borde de 1 píxel y color suave */
+  border-radius: 20px;
+}
+header {
+    color: var(--light-gray);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid gray;
+    margin: auto;
+    text-align: center;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+label{
+  z-index:999;
+}
+
+/* From uiverse.io */
+.button {
+    padding: 0.7rem;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background: var(--translucent-white);
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.2);
+}
+  
+.button:hover {
+    background-color: var(--light-blue);
+    box-shadow: 0px 15px 20px rgba(46, 104, 229, 0.4);
+    background-color: var(--light-orange);
+    color: #fff;
+    fill: #fff;
+    transform: translateY(-7px);
+}
+
+.button-bd {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background: var(--translucent-white);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.button-bd:hover {
+  background-color: var(--light-blue);
+  box-shadow: 0px 15px 20px rgba(46, 104, 229, 0.4);
+  background-color: var(--light-orange);
+  color: #fff;
+  fill: #fff;
+  transform: translateY(-7px);
+}
+.buttonCheck {
+  padding: 0.7rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background: var(--translucent-white);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.2);
+}
+.btnCheck {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 45%;
+  margin: 2px;
+  color:var(--dark-orange);
+
+  border-color: var(--dark-orange);
+}
+
+.pulsado {
+  background-color: var(--light-orange);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+/* .buttonCheck.activeBoton {
+  background: red ;
+} */
+.buttonCheck:hover {
+  box-shadow: 0px 15px 20px rgba(46, 104, 229, 0.4);
+  background-color: var(--light-orange);
+  color: #fff;
+  fill: #fff;
+}
+
+.button:active {
+    transform: translateY(-1px);
+}
+
+/*contenedor general*/
+.app {
+    display: flex;
+    height: 100vh;
+    width: calc(100% - 3.2rem);
+    border: 1px solid var(--heavy-grey);
+    position: relative; /* Set container position as relative */
+    overflow: hidden;
+}
+#inputARTP {
+  position: fixed;
+  top: 5%;
+  right: 80px;
+  height: auto;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  display: none;
+  z-index: 9999;
+  background-color: var(--light-orange);
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.barra-lateral {
+    background-color: var(--light-orange);
+    width: 3.5 rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--heavy-grey);
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* justify-content: center; */
+}
+  
+
+.toolbar {
+  padding: 5px;
+  padding-top: 50px;
+}
+
+.toolbar a.button svg {
+  vertical-align: middle;
+}
+.toolbar a.button {
+  margin-top: 5px; /* ajusta el valor según sea necesario */
+}
+
+canvas {
+  flex: 1;
+  height: 100%;
+  width: calc(100% - 4rem);
+}
+
+/* From uiverse.io */
+.button-barra-lateral {
+    padding: 0.7rem;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background: var(--translucent-white);
+    border: 1px solid var(--heavy-grey);
+    border-radius: 5px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-top: 20px; 
+}
+#conexion {
+  background-color: var(--orange);
+  animation: heartbeat 2s infinite;
+}
+
+/* Animación de latido */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.active{
+  padding: 0.7rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background: var(--orange) ;
+  border: 1px solid var(--heavy-grey);
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 5px; 
+}
+
+.activo {
+  padding: 0.7rem;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000 !important;
+  background: var(--orange) !important;
+  border: 1px solid var(--heavy-grey);
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 5px; 
+  text-align: center !important;
+}
+.activoBtnLabelPlanta {
+  padding: 0.7rem;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000 !important;
+  background: var(--orange) !important;
+  border: 1px solid var(--heavy-grey);
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 30px;
+  margin-top: 5px; 
+  text-align: center !important;
+}
+
+.activoBtn2DPlanta {
+  padding: 0.7rem;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000 !important;
+  background: var(--orange) !important;
+  border: 1px solid var(--heavy-grey);
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 30px;
+  margin-top: 5px; 
+  text-align: center !important;
+}
+
+
+.button-carga-ifc {
+  padding: 0.4rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 900;
+  color: #000;
+  background: var(--light-orange);
+  border: 2px solid white;
+  border-radius: 10px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  text-align: left;
+  background-image: url('/static/favicon.ico');
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+
+
+
+#loader-button {
+  position: fixed;
+  top: 5px; /* ajusta la posición vertical */
+  left: 5px; /* ajusta la posición horizontal */
+  z-index: 999;
+}
+
+/*contenedor botones de planos*/
+#button-container {
+  position: fixed;
+  top: 15rem; /* ajusta la posición vertical */
+  left: 1rem; /* ajusta la posición horizontal */
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  visibility: hidden;
+}
+
+.additional-button {
+  
+  display: inline-block;
+  /* Agrega otros estilos según sea necesario */
+}
+
+#botonImportar{
+  position: fixed;
+  top: 80px; /* ajusta la posición vertical */
+  left: 20px; /* ajusta la posición horizontal */
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  border-radius: 2px !important;
+  visibility: hidden;
+}
+
+#botonConexion{
+  position: fixed;
+  top: 50vh; /* ajusta la posición vertical */
+  left: 50vw; /* ajusta la posición horizontal */
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  border-radius: 2px !important;
+  visibility: hidden;
+  border-radius: 0px;
+}
+#button-container button{
+  border: 1px solid var(--light-grey);
+  background: white;
+  border-color: var(--orange);
+  color:var(--orange);
+  border-radius: 25px;
+  margin: 0.2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  width: 8rem;
+  transition: width 0.2s ease-in-out;
+}
+#file-input{
+  visibility: collapse;
+  visibility: hidden;
+  position: absolute;
+}
+
+#file-name {
+  position: absolute;
+  top: 10px;
+  left: 90px;
+  z-index: 999;
+  padding: 10px;
+  color:var(--dark-orange);
+  background-color:white;
+  border-color: 1px solid var(--dark-orange);
+  border-radius: 5px;
+  display :none;
+}
+
+#importCSV{
+  visibility: collapse;
+  visibility: hidden;
+  position: absolute;
+}
+/* 
+
+
+
+
+/* Estilos específicos para pantallas más grandes (por ejemplo, tablets) */
+@media screen and (min-width: 768px) {
+  #divNumCamiones {
+    left: 10%;
+    width: 80%;
+  }
+}
+
+
+
+#checkbox-container {
+    visibility: hidden;
+    position:fixed;
+    display: flex;
+  flex-direction: column;
+    bottom:50px;
+    padding: 0.3rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    margin: 5px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  
+
+  .checkbox-container > * {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+  }
+  .checkbox-button-container {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+  }
+  
+
+.pieza-label{
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid black;
+  border-radius: 3px;
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
+  font-family: 'Roboto';
+  pointer-events: all;
+}
+
+
+element.style {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 0px;
+  left: 0px;
+  cursor: default;
+}
