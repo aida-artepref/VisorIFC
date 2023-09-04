@@ -200,6 +200,8 @@ label{
   border-radius: 5px;
   padding: 5px;
   border: 1px solid black;
+  height: 2rem;
+  width: auto;
 }
 
 .barra-lateral {
@@ -219,6 +221,7 @@ label{
 .toolbar {
   padding: 5px;
   padding-top: 50px;
+  visibility: hidden;
 }
 
 .toolbar a.button svg {
@@ -378,8 +381,8 @@ canvas {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 60px;
-  height: 60px;
+  width: 4rem;
+  height: 4rem ;
   margin: 5px;
   text-align: left;
   background-image: url('/static/favicon.ico');
@@ -387,15 +390,74 @@ canvas {
   background-position: center;
 }
 
-
+.button-carga-ifc-arte-tipos {
+  padding: 0.4rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 900;
+  color: #000;
+  background: var(--light-orange);
+  border: 2px solid white;
+  border-radius: 10px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 5px;
+  text-align: center;
+  background-image: url(/static/favicon.ico);
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 80px; /* ajusta la posición vertical */
+  left: 5px; /* ajusta la posición horizontal */
+  z-index: 999;
+}
+#loader-button-ext{
+  padding: 0.4rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 900;
+  color: #000;
+  background: var(--light-orange);
+  border: 2px solid white;
+  border-radius: 10px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 5px;
+  text-align: center;
+  
+  position: fixed;
+  top: 160px; /* ajusta la posición vertical */
+  left: 5px; /* ajusta la posición horizontal */
+  z-index: 999;
+}
 
 
 
 
 #loader-button {
   position: fixed;
-  top: 5px; /* ajusta la posición vertical */
-  left: 5px; /* ajusta la posición horizontal */
+  top: 0.3rem; /* ajusta la posición vertical */
+  left: 0.3rem; /* ajusta la posición horizontal */
   z-index: 999;
 }
 
@@ -450,7 +512,18 @@ canvas {
   width: 8rem;
   transition: width 0.2s ease-in-out;
 }
+
 #file-input{
+  visibility: collapse;
+  visibility: hidden;
+  position: absolute;
+}
+#file-input-arte-tipos{
+  visibility: collapse;
+  visibility: hidden;
+  position: absolute;
+}
+#file-input-ext{
   visibility: collapse;
   visibility: hidden;
   position: absolute;
@@ -458,7 +531,7 @@ canvas {
 
 #file-name {
   position: absolute;
-  top: 10px;
+  top: 1rem;
   left: 90px;
   z-index: 999;
   padding: 10px;
@@ -539,4 +612,19 @@ element.style {
   top: 0px;
   left: 0px;
   cursor: default;
+}
+
+
+.divCheck {
+  position: fixed;
+  bottom: 1rem;
+  left:1rem;
+  background-color:rgba(255, 255, 255, 1);
+  border: 1px solid rgb(126, 126, 126);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  width: auto;
+  height: auto; 
+  z-index:9; 
+  border-radius: 5px;
 }
