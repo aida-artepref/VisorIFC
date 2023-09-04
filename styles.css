@@ -464,7 +464,7 @@ canvas {
 /*contenedor botones de planos*/
 #button-container {
   position: fixed;
-  top: 15rem; /* ajusta la posición vertical */
+  top: 5rem; /* ajusta la posición vertical */
   left: 1rem; /* ajusta la posición horizontal */
   z-index: 999;
   width: 50px;
