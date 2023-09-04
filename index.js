@@ -1,13 +1,8 @@
-import { Color,
-  Loader, Vector3, Vector2, BufferAttribute, SphereGeometry , BufferGeometry,
-  MultiMaterial, MeshLambertMaterial, BoxGeometry, MeshBasicMaterial, LineBasicMaterial, MeshStandardMaterial,
-  PerspectiveCamera, Raycaster,
-  Scene, LineSegments , EdgesGeometry, Mesh, Group, MeshPhongMaterial, WebGLRenderer, OrthographicCamera, BoxHelper}  from 'three';
+import { Color, MeshLambertMaterial, MeshBasicMaterial, LineBasicMaterial, Mesh,  BoxHelper}  from 'three';
 import{ IfcViewerAPI } from 'web-ifc-viewer';
 import { IfcElementQuantity } from 'web-ifc';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
-import { PlanManager } from 'web-ifc-viewer/dist/components/display/plans/plan-manager';
-import { IfcAPI } from "web-ifc/web-ifc-api";
+
 import { NavCube } from './NavCube/NavCube.js';
 
 const container = document.getElementById('app');
