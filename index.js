@@ -90,7 +90,7 @@ const toggleFullScreen = () => {
 GUI.loader.onclick = () => GUI.input.click();  //al hacer clic al boton abre cuadro de dialogo para cargar archivo
 GUI.loaderArteTipos.onclick = () => GUI.inputArteTipos.click()
 GUI.loaderExt.onclick = () => GUI.inputExt.click();
-GUI.loaderExt.addEventListener('click', toggleFullScreen);
+//GUI.loaderExt.addEventListener('click', toggleFullScreen);
 
 
 

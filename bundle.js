@@ -122636,31 +122636,11 @@ document.getElementById("file-input-ext").addEventListener("change", function() 
   document.getElementById("file-name").style.display = "block"; 
 });
 
-const toggleFullScreen = () => {
-  const appContainer = document.querySelector('.container'); // Reemplaza 'app-container' con el ID de tu contenedor principal
-
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    // Si ya estamos en pantalla completa, salimos de ella
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  } else {
-    // Solicitamos entrar en pantalla completa en el elemento principal de tu app
-    if (appContainer.requestFullscreen) {
-      appContainer.requestFullscreen();
-    } else if (appContainer.webkitRequestFullscreen) {
-      appContainer.webkitRequestFullscreen();
-    }
-  }
-};
-
 
 GUI.loader.onclick = () => GUI.input.click();  //al hacer clic al boton abre cuadro de dialogo para cargar archivo
 GUI.loaderArteTipos.onclick = () => GUI.inputArteTipos.click();
 GUI.loaderExt.onclick = () => GUI.inputExt.click();
-GUI.loaderExt.addEventListener('click', toggleFullScreen);
+//GUI.loaderExt.addEventListener('click', toggleFullScreen);
 
 
 
