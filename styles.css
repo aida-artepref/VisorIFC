@@ -385,7 +385,7 @@ canvas {
   height: 4rem ;
   margin: 5px;
   text-align: left;
-  background-image: url('/static/favicon.ico');
+  background-image: url('./static/favicon.ico');
   background-size: cover;
   background-position: center;
 }
