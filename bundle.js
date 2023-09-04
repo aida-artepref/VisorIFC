@@ -122636,10 +122636,33 @@ document.getElementById("file-input-ext").addEventListener("change", function() 
   document.getElementById("file-name").style.display = "block"; 
 });
 
+const toggleFullScreen = () => {
+  const appContainer = document.querySelector('.container'); // Reemplaza 'app-container' con el ID de tu contenedor principal
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    // Si ya estamos en pantalla completa, salimos de ella
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  } else {
+    // Solicitamos entrar en pantalla completa en el elemento principal de tu app
+    if (appContainer.requestFullscreen) {
+      appContainer.requestFullscreen();
+    } else if (appContainer.webkitRequestFullscreen) {
+      appContainer.webkitRequestFullscreen();
+    }
+  }
+};
+
 
 GUI.loader.onclick = () => GUI.input.click();  //al hacer clic al boton abre cuadro de dialogo para cargar archivo
 GUI.loaderArteTipos.onclick = () => GUI.inputArteTipos.click();
 GUI.loaderExt.onclick = () => GUI.inputExt.click();
+GUI.loaderExt.addEventListener('click', toggleFullScreen);
+
+
 
 //cada vez elemento imput cambia, genera uURL y lo pasa a la lib IFC
 GUI.input.onchange = async (event) => {
@@ -123487,8 +123510,17 @@ const checkboxContainerTipos = document.getElementById('checktiposIfc');
 
 floorplanButton.onclick = () => {
   if (checkboxContainerTipos.style.display !== "none") {  // Oculta el elemento filtrar en los checkBox
-    checkboxContainerTipos.style.display = "none";
-}
+    checkboxContainerTipos.style.visibility="hidden";
+  }
+
+  const buttonContainer = document.getElementById('button-container');
+  const activeButton = buttonContainer.querySelector('button.activo');
+  
+  if (activeButton) {
+    // Si hay un botón activo dentro de button-container, ejecuta viewer.plans.exitPlanView()
+    viewer.plans.exitPlanView();
+  }
+
   let btnIfcArt=document.getElementById('loader-button');
   let btnIfcArteTipos=document.getElementById('loader-button-arte-tipos');
   if (!floorplansActive && btnIfcArt.style.display==='none'&& btnIfcArteTipos.style.display==='none'){
@@ -123506,6 +123538,8 @@ floorplanButton.onclick = () => {
     floorplansButtonContainer.classList.remove('visible');
 
     floorplansButtonContainer.style.visibility = 'hidden';
+
+    checkboxContainerTipos.style.visibility="visible";
 
     //desactiva los botones de plantas cuando se apaga el boton que genera los planos
     const containerForButtons = document.getElementById('button-container');
@@ -123564,21 +123598,38 @@ async function getPlantasExt(){
   container.style.visibility='visible';
    container.innerHTML = '';
 
-	for (const plan of allPlans) {
-		const currentPlan = viewer.plans.planLists[model.modelID][plan];
-		const button = document.createElement('button');
-		container.appendChild(button);
-		button.textContent = currentPlan.name;
-		button.onclick = () => {
-			viewer.plans.goTo(model.modelID, plan);
-			viewer.edges.toggle('example', true);
-		};
-	}
+   for (const plan of allPlans) {
+    const currentPlan = viewer.plans.planLists[model.modelID][plan];
+    const button = document.createElement('button');
+    container.appendChild(button);
+    button.textContent = currentPlan.name;
+  
+    button.onclick = () => {
+      
+      const allButtons = container.querySelectorAll('button');
+  
+      allButtons.forEach((otherButton) => {
+        otherButton.classList.remove('activo');
+      });
+      button.classList.add('activo');
+  
+      viewer.plans.goTo(model.modelID, plan);
+      viewer.edges.toggle('example', true);
+    };
+  }
+  
 
 	const button = document.createElement('button');
 	container.appendChild(button);
 	button.textContent = 'Exit';
 	button.onclick = () => {
+    const buttonContainer = document.getElementById('button-container');
+    const activeButton = buttonContainer.querySelector('button.activo');
+    
+    if (activeButton) {
+      // Si hay un botón activo dentro de button-container, ejecuta viewer.plans.exitPlanView()
+      activeButton.classList.remove('activo');
+    }
 		viewer.plans.exitPlanView();
 		viewer.edges.toggle('example', false);
 	};
