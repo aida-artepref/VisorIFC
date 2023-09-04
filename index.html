@@ -18,10 +18,14 @@
 
 <body>
     <input type="file" id="file-input" accept=".ifc" >
+    <input type="file" id="file-input-arte-tipos" accept=".ifc" >
+    <input type="file" id="file-input-ext" accept=".ifc" >
     <label id="file-name" ></label> 
-    <input type="file" id="importCSV" accept=".csv">
+    <!-- <input type="file" id="importCSV" accept=".csv"> -->
 
-    <div id="loader-button" class="button-carga-ifc">IFC</div>
+    <div id="loader-button" class="button-carga-ifc">IFC mont</div>
+    <div id="loader-button-arte-tipos" class="button-carga-ifc-arte-tipos"> </div>
+    <div id="loader-button-ext" class="button-carga-ifc">IFC-ext</div>
 
     <div class="button-container" id="button-container"></div>
     
@@ -45,6 +49,8 @@
     </div>
     
     <div  id="divNumCamiones" > </div>
+
+    <div id="checktiposIfc" class="divCheck" style="display: none;"></div>
 
     <div class="container">
         <div class="app" id="app">

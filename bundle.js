@@ -122605,13 +122605,18 @@ document.addEventListener("keydown", function(event) {
 });
 
 viewer.context.renderer.usePostproduction = true;
-viewer.IFC.selector.defSelectMat.color = new Color('#588d4e');
+viewer.IFC.selector.defSelectMat.color = new Color('#d6e500');
 
 const GUI={
     input: document.getElementById("file-input"),
     loader: document.getElementById("loader-button"),
-    // importer: document.getElementById("importCSV"),
-    // importloader: document.getElementById("importButton"),
+
+    inputArteTipos: document.getElementById("file-input-arte-tipos"),
+    loaderArteTipos: document.getElementById("loader-button-arte-tipos"),
+
+    inputExt: document.getElementById("file-input-ext"),
+    loaderExt: document.getElementById("loader-button-ext"),
+    
 };
 
 //Muestra el nombre del archivo abierto
@@ -122620,15 +122625,39 @@ document.getElementById("file-input").addEventListener("change", function() {
     document.getElementById("file-name").innerHTML = file.name;
     document.getElementById("file-name").style.display = "block"; 
 });
+document.getElementById("file-input-arte-tipos").addEventListener("change", function() {
+  const file = this.files[0];
+  document.getElementById("file-name").innerHTML = file.name;
+  document.getElementById("file-name").style.display = "block"; 
+});
+document.getElementById("file-input-ext").addEventListener("change", function() {
+  const file = this.files[0];
+  document.getElementById("file-name").innerHTML = file.name;
+  document.getElementById("file-name").style.display = "block"; 
+});
+
 
 GUI.loader.onclick = () => GUI.input.click();  //al hacer clic al boton abre cuadro de dialogo para cargar archivo
-//GUI.importloader.onclick = () => GUI.importer.click();
+GUI.loaderArteTipos.onclick = () => GUI.inputArteTipos.click();
+GUI.loaderExt.onclick = () => GUI.inputExt.click();
 
 //cada vez elemento imput cambia, genera uURL y lo pasa a la lib IFC
 GUI.input.onchange = async (event) => {
     const file=event.target.files[0];
     const url=URL.createObjectURL(file);
     loadModel(url); 
+};
+
+GUI.inputExt.onchange = async (event) => {
+  const file=event.target.files[0];
+  const url=URL.createObjectURL(file);
+  loadModelExt(url); 
+};
+
+GUI.inputArteTipos.onchange = async (event) => {
+  const file=event.target.files[0];
+  const url=URL.createObjectURL(file);
+  loadModelArteTipos(url); 
 };
 let model;
 let allIDs;
@@ -122643,6 +122672,11 @@ let subset;
 async function loadModel(url) {
   model = await viewer.IFC.loadIfcUrl(url);
   console.log(model);
+
+  const btnLoadIfcExt = document.getElementById('loader-button-ext');
+  btnLoadIfcExt.style.display = 'none';
+  const btnLoadIfcArtetipos = document.getElementById('loader-button-arte-tipos');
+  btnLoadIfcArtetipos.style.display = 'none';
   getPlantas(model);
 
   precastElements = await createPrecastElementsArray(model.modelID);
@@ -122657,7 +122691,7 @@ async function loadModel(url) {
   creaBoxHelper();
   subset = getWholeSubset(viewer, model, allIDs);
   replaceOriginalModelBySubset(viewer, model, subset);
-
+  visibleToolbar();
   viewer.context.fitToFrame();
   setTimeout(() => {
     agregarPropiedadesElementPart();
@@ -122666,7 +122700,6 @@ async function loadModel(url) {
   setTimeout(() => {
     eliminarElementosAssembly();
   }, 100);
-  
   
   const checkboxContainer = document.getElementById('checkbox-container');
   setTimeout(function() {
@@ -122678,6 +122711,77 @@ async function loadModel(url) {
   }, 100);
 }
 
+async function loadModelArteTipos(url) {
+  model = await viewer.IFC.loadIfcUrl(url);
+  console.log(model);
+
+  const btnLoadIfcExt = document.getElementById('loader-button-ext');
+  btnLoadIfcExt.style.display = 'none';
+  getPlantas(model);
+
+  precastElements = await createPrecastElementsArray(model.modelID);
+ // await cargaGlobalIdenPrecast(precastElements);
+  
+  // await viewer.IFC.getSpatialStructure(model.modelID);
+  // await cargaProp();
+
+  allIDs = getAllIds(model);
+  idsTotal = getAllIds(model);
+  viewer.shadows = true;
+  creaBoxHelper();
+  subset = getWholeSubset(viewer, model, allIDs);
+  replaceOriginalModelBySubset(viewer, model, subset);
+  let btnArteMontaje = document.getElementById("loader-button");
+  btnArteMontaje.style.display='none';
+  let btnArteTipos = document.getElementById("loader-button-arte-tipos");
+  btnArteTipos.style.top = '0.7rem';
+  viewer.context.fitToFrame();
+  
+  viewer.shadows = true;
+  creaBoxHelper();
+  subset = getWholeSubset(viewer, model, allIDs);
+  replaceOriginalModelBySubset(viewer, model, subset);
+  visibleToolbar();
+  const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID); //ifcProyect parametro necesario para obtener los elementos de IFC del modelo
+    setIfcPropertiesContent(ifcProject);
+    document.getElementById("checktiposIfc").style.display = "block"; //hace visible el divCheck 
+    setTimeout(function() {
+      addCheckboxListenersExt();
+    }, 1000);
+}
+
+async function loadModelExt(url) {
+  model = await viewer.IFC.loadIfcUrl(url);
+  console.log(model);
+
+  const btnLoadIfcArt = document.getElementById('loader-button');
+  btnLoadIfcArt.style.display = 'none';
+  const btnLoadIfcArtetipos = document.getElementById('loader-button-arte-tipos');
+  btnLoadIfcArtetipos.style.display = 'none';
+
+  const btnLoadIfcExt = document.getElementById('loader-button-ext');
+  btnLoadIfcExt.style.top = '0.7rem';
+  allIDs = getAllIds(model);
+  idsTotal = getAllIds(model);
+  precastElements = await createPrecastElementsArray(model.modelID);
+  viewer.shadows = true;
+  creaBoxHelper();
+  subset = getWholeSubset(viewer, model, allIDs);
+  replaceOriginalModelBySubset(viewer, model, subset);
+  visibleToolbar();
+  const ifcProject = await viewer.IFC.getSpatialStructure(model.modelID); //ifcProyect parametro necesario para obtener los elementos de IFC del modelo
+    setIfcPropertiesContent(ifcProject);
+    document.getElementById("checktiposIfc").style.display = "block"; //hace visible el divCheck 
+    setTimeout(function() {
+      addCheckboxListenersExt();
+    }, 1000);
+}
+
+
+function visibleToolbar(){
+  const toolbarElement = document.querySelector('.toolbar');
+  toolbarElement.style.visibility = 'visible';
+}
 
 // TODO: -------------- carga modelo ArtePref y crea array precastElements --------------------------------------------
 async function createPrecastElementsArray(modelID){
@@ -122923,6 +123027,89 @@ async function generateLabels(expressIDs) {
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+  //******************************************************************************************************************* */
+ /// ---------------estas tres funciones son necesarias para obtener solo las categorias de IFC cargado------------------------
+ //-------------extrae todos los tipos de elementos del modelo y los agrupa en un objeto llamado categorias.
+ function setIfcPropertiesContent(ifcProject, viewer, model) {
+  const ifcClass = getIfcClass(ifcProject);
+  let uniqueClasses = [...new Set(ifcClass)];
+  const checkboxesHTML = generateCheckboxesExt(uniqueClasses);
+  document.getElementById('checktiposIfc').innerHTML = checkboxesHTML;
+
+  const btnNota = document.querySelectorAll('.btn-notacion');
+  btnNota.forEach(function(button) {
+  
+      const icon = document.createElement('i');
+      icon.classList.add('fas', 'fa-sticky-note');
+      button.appendChild(icon);
+
+      button.addEventListener('click', function(event) {
+          const checkbox = event.currentTarget.parentElement.querySelector('input[type="checkbox"]');
+          if (checkbox !== null) {
+              checkbox.getAttribute('data-class');
+              //console.log("Has pulsado el botón : " + classValue);
+          }
+      });
+  });
+}
+
+//recorre el modelo y almacena el tipo de cada elemento en un array typeArray.
+function getIfcClass(ifcProject) {
+  let typeArray = [];
+  return getIfcClass_base(ifcProject, typeArray);
+}
+
+//recursivamente  se llama a sí misma para procesar los hijos de cada elemento y agregar su tipo al array.
+function getIfcClass_base(ifcProject, typeArray) {
+  const children = ifcProject.children;
+  if (children.length === 0) {
+      typeArray.push(ifcProject.type);
+  } else {
+      for (const obj of children) {
+          getIfcClass_base(obj, typeArray);
+      }
+  }
+  return typeArray;
+}
+
+// Crea automaticamente los check con las categorias del IFC cargado y  asocia un numero a cada check(dataclass)
+function generateCheckboxesExt(uniqueClasses) {
+  let html = '';
+  uniqueClasses.forEach(function(uniqueClass) {
+      html += `<div class="checkbox-container">`;
+      // html += `<button class="btn-notacion" data-id="${uniqueClass}"> </button>`;
+      html += `<input type="checkbox" checked data-class="${uniqueClass}">${uniqueClass}`;
+      html += `</div>`;
+  });
+  return html;
+}
+
+//evento cambio en los checK tipos de elementos
+function addCheckboxListenersExt() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+          viewer.IFC.selector.unpickIfcItems();
+          const isChecked = this.checked;
+          const tipo = this.getAttribute('data-class');
+          const matchingIds = [];
+          for (let i = 0; i < precastElements.length; i++) {
+              const element = precastElements[i];
+              if (element.ifcType === tipo) {
+                  matchingIds.push(element.expressID);
+              }
+          }
+          if (isChecked) { 
+              showAllItems(viewer, matchingIds);
+          } else {
+              hideAllItems(viewer, matchingIds);
+          }
+      });
+      
+  });
+  
+}
+
 
 //TODO todosIDS, creaSUBSET************************************************************************************************************
 
@@ -122990,54 +123177,34 @@ function creaBoxHelper(){
 }
 
 container.onclick = async () => {
-  const found = await viewer.IFC.selector.pickIfcItem(false);
- // console.log("found", JSON.stringify(found));
-  
-  if (found === null || found === undefined) {
-    const container = document.getElementById('propiedades-container');
-    container.style.visibility = "hidden";
-    viewer.IFC.selector.unpickIfcItems();
-    return;
-  }
+  const loaderButton = document.getElementById('loader-button');
 
-  // if (btnEstadoMontaje.classList.contains('active')) {
-  
-  //   if (found && found.id) {
-  //     console.log("existe foundID"+found.id);
-  //     if (expressIDMontados.includes(found.id)) {
-  //       const indexToRemove = expressIDMontados.indexOf(found.id);
-  //       if (indexToRemove !== -1) {
-  //         expressIDMontados.splice(indexToRemove, 1);
-  //       }
-  //       expressIDNoMontados.push(found.id);
-  //     } else if (expressIDNoMontados.includes(found.id)) {
-  //       const indexToRemove = expressIDNoMontados.indexOf(found.id);
-  //       if (indexToRemove !== -1) {
-  //         expressIDNoMontados.splice(indexToRemove, 1);
-  //       }
-  //       expressIDMontados.push(found.id);
-  //     }
-      
-  //   }
-  //   document.getElementById("estadoPieza").click();
+  // Verifica si el botón está visible
+  if (loaderButton.style.display !== 'none') {
+    const found = await viewer.IFC.selector.pickIfcItem(false);
+  // console.log("found", JSON.stringify(found));
     
-  //   document.getElementById("estadoPieza").click();
-  // }else{
-    const expressID = found.id;
-
-    let ART_Pieza = null;
-    let ART_Longitud = null;
-
-    for (const precast of precastElements) {
-      if (precast.expressID === expressID) {
-        ART_Pieza = precast['ART_Pieza'];
-        ART_Longitud = precast['ART_Longitud'];
-        ART_Peso=precast['ART_Peso'];
-        break;
-      }
+    if (found === null || found === undefined) {
+      const container = document.getElementById('propiedades-container');
+      container.style.visibility = "hidden";
+      viewer.IFC.selector.unpickIfcItems();
+      return;
     }
-    muestraPropiedades(ART_Pieza, ART_Longitud, ART_Peso);
-  // }
+      const expressID = found.id;
+
+      let ART_Pieza = null;
+      let ART_Longitud = null;
+
+      for (const precast of precastElements) {
+        if (precast.expressID === expressID) {
+          ART_Pieza = precast['ART_Pieza'];
+          ART_Longitud = precast['ART_Longitud'];
+          ART_Peso=precast['ART_Peso'];
+          break;
+        }
+      }
+      muestraPropiedades(ART_Pieza, ART_Longitud, ART_Peso);
+  }
 };
 
 function ocultarLabels() {
@@ -123127,7 +123294,6 @@ function hideAllItems(viewer, ids) {
     }); 
     
 }
-
 function showAllItems(viewer, ids) {
 	viewer.IFC.loader.ifcManager.createSubset({
 		modelID: 0,
@@ -123263,7 +123429,7 @@ function modelCopyCompletoFunction(){
   const materialSolid = new MeshLambertMaterial({
       transparent: true,
       opacity: 0.3,
-      color: 0x54a2c4,
+      color: 0x146b10,//0x54a2c4
   });
 modelCopyCompleto = new Mesh(model.geometry, materialSolid);
         scene.add(modelCopyCompleto);
@@ -123316,28 +123482,39 @@ let floorplansActive = false;
 const floorplanButton = document.getElementById('btn-lateral-plantas');
 let floorplansButtonContainer = document.getElementById('button-container');
 const checkboxContainer = document.getElementById('checkbox-container');
+document.getElementById('loader-button');
+const checkboxContainerTipos = document.getElementById('checktiposIfc');
 
 floorplanButton.onclick = () => {
-  
-  if(floorplansActive) {
+  if (checkboxContainerTipos.style.display !== "none") {  // Oculta el elemento filtrar en los checkBox
+    checkboxContainerTipos.style.display = "none";
+}
+  let btnIfcArt=document.getElementById('loader-button');
+  let btnIfcArteTipos=document.getElementById('loader-button-arte-tipos');
+  if (!floorplansActive && btnIfcArt.style.display==='none'&& btnIfcArteTipos.style.display==='none'){
+    floorplanButton.classList.add('active');
+    getPlantasExt();
+  }else {
+    let botonesPlantasExt=document.getElementById('button-container');
+    botonesPlantasExt.style.visibility="hidden";
+  }
+  if(floorplansActive ) {
     checkboxContainer.style.visibility = 'visible';
     marcarCheckboxes();
     floorplansActive = !floorplansActive;
     floorplanButton.classList.remove('active');
     floorplansButtonContainer.classList.remove('visible');
-    
-    hideAllItems(viewer, idsTotal );
-      showAllItems(viewer, idsTotal);
+
     floorplansButtonContainer.style.visibility = 'hidden';
 
-    hideAllItems(viewer, idsTotal );
-      showAllItems(viewer, idsTotal);
     //desactiva los botones de plantas cuando se apaga el boton que genera los planos
     const containerForButtons = document.getElementById('button-container');
     const buttons = containerForButtons.querySelectorAll('button');
     for (const button of buttons) {
       if (button.classList.contains('activo')) {
         button.classList.remove('activo');
+        hideAllItems(viewer, idsTotal );
+        showAllItems(viewer, idsTotal);
       }
     }
     ocultaBtnRemoveClass();
@@ -123351,7 +123528,9 @@ floorplanButton.onclick = () => {
     floorplansButtonContainer = document.getElementById('button-container');
     floorplansButtonContainer.style.visibility = 'visible';
     
-  }};
+  }
+  
+};
 
 function findNodeWithExpressID(node, expressID) {
   if (node.expressID === expressID) {
@@ -123365,6 +123544,47 @@ function findNodeWithExpressID(node, expressID) {
   }
   return null;
 }
+
+async function getPlantasExt(){
+  await viewer.plans.computeAllPlanViews(model.modelID);
+
+	new LineBasicMaterial({ color: 'black' });
+	new MeshBasicMaterial({
+		polygonOffset: true,
+		polygonOffsetFactor: 1, // positive value pushes polygon further away
+		polygonOffsetUnits: 1,
+	});
+	
+
+	// Floor plan viewing
+
+	const allPlans = viewer.plans.getAll(model.modelID);
+
+	const container = document.getElementById('button-container');
+  container.style.visibility='visible';
+   container.innerHTML = '';
+
+	for (const plan of allPlans) {
+		const currentPlan = viewer.plans.planLists[model.modelID][plan];
+		const button = document.createElement('button');
+		container.appendChild(button);
+		button.textContent = currentPlan.name;
+		button.onclick = () => {
+			viewer.plans.goTo(model.modelID, plan);
+			viewer.edges.toggle('example', true);
+		};
+	}
+
+	const button = document.createElement('button');
+	container.appendChild(button);
+	button.textContent = 'Exit';
+	button.onclick = () => {
+		viewer.plans.exitPlanView();
+		viewer.edges.toggle('example', false);
+	};
+
+}
+
 
 const elementsArraysByPlan = {};
 async function getPlantas(model) {
@@ -123426,13 +123646,32 @@ async function getPlantas(model) {
       console.log("ExpressId: "+expressIDplanta+" de la planta: "+button.textContent);
 
       if (!elementsArraysByPlan[currentPlan.name]) {
-        elementsArraysByPlan[currentPlan.name] = []; // Crea un nuevo array si no existe para este plan
-    } else if (elementsArraysByPlan[currentPlan.name].length === 0) {
-        // Si el array ya existe pero está vacío, llenarlo solo si es necesario.
-        console.log(`Array ya existente en memoria ${currentPlan.name}:`, elementsArraysByPlan[currentPlan.name]);
-    } else {
-        console.log(`Array ya existente en memoria ${currentPlan.name}: (Ya contiene elementos)`);
-    }
+          elementsArraysByPlan[currentPlan.name] = []; // Crea un nuevo array si no existe para este plan
+      } else if (elementsArraysByPlan[currentPlan.name].length === 0) {
+          // Si el array ya existe pero está vacío, llenarlo solo si es necesario.
+          console.log(`Array ya existente en memoria ${currentPlan.name}:`, elementsArraysByPlan[currentPlan.name]);
+      } else {
+          console.log(`Array ya existente en memoria ${currentPlan.name}: (Ya contiene elementos)`);
+      }
+
+      //comprueba si algun btn2D esat pulsado
+      var container = document.querySelector('.button-container');
+      var elementos = container.querySelectorAll('.activoBtn2DPlanta'); // Cambia 'tu-clase-de-elemento' al selector correcto
+
+      // Verificar si alguno de los elementos contiene la clase deseada
+      var contieneClase = false;
+      for (var i = 0; i < elementos.length; i++) {
+          if (elementos[i].classList.contains('activoBtn2DPlanta')) {
+              contieneClase = true;
+              break;
+          }
+      }
+    
+      if (contieneClase) {
+          viewer.context.ifcCamera.toggleProjection();
+          viewer.context.ifcCamera.cameraControls.setLookAt(posicionInicial.x, posicionInicial.y, posicionInicial.z, centro.x, centro.y, centro.z);
+      }
+
     
       const elementsArray = elementsArraysByPlan[currentPlan.name]; // Obtén el array existente o recién creado
       try {
@@ -123521,7 +123760,7 @@ async function getPlantas(model) {
       if (btn2DPlantas.classList.contains('activoBtn2DPlanta')) {
         btn2DPlantas.classList.remove('activoBtn2DPlanta');
         plantaActivo = false;
-        generatePlanta2D(plantaActivo);
+       generatePlanta2D(plantaActivo);
       } else {
         btn2DPlantas.classList.add('activoBtn2DPlanta');
         plantaActivo = true;
@@ -123534,6 +123773,7 @@ async function getPlantas(model) {
             z: camera.position.z
           };
         }
+       
         generatePlanta2D(plantaActivo);
       }
     };
@@ -123561,7 +123801,22 @@ function ocultaBtnRemoveClass(){
       btnLabel.style.visibility = 'hidden';
       btnLabel.classList.remove('activoBtnLabelPlanta');  
   });
-
+  let container = document.querySelector('.button-container');
+  let elementos = container.querySelectorAll('.activoBtn2DPlanta'); // Cambia 'tu-clase-de-elemento' al selector correcto
+  
+  // Verificar si alguno de los elementos contiene la clase deseada
+  var contieneClase = false;
+  for (var i = 0; i < elementos.length; i++) {
+      if (elementos[i].classList.contains('activoBtn2DPlanta')) {
+          contieneClase = true;
+          break;
+      }
+  }
+  
+  // Condición if basada en la verificación
+  if (contieneClase) {
+    viewer.context.ifcCamera.toggleProjection();
+  }
   const btn2DPlantasList = document.querySelectorAll('.btn2DPlanta');
       btn2DPlantasList.forEach((btn2D) => {
         btn2D.style.visibility = 'hidden';
@@ -123571,8 +123826,8 @@ function ocultaBtnRemoveClass(){
     return;
   }
   else {
-    viewer.context.ifcCamera.toggleProjection();
-    viewer.context.ifcCamera.cameraControls.setLookAt(posicionInicial.x, posicionInicial.y, posicionInicial.z, 0, 0, 0);
+    
+    viewer.context.ifcCamera.cameraControls.setLookAt(posicionInicial.x, posicionInicial.y, posicionInicial.z, centro.x, centro.y, centro.z);
   }
 }
 
@@ -123583,17 +123838,41 @@ function generatePlanta2D(plantaActivo) {
   // CREA UN IMAGEN DE LA CAMARA EN ESA POSICION
 
   if (plantaActivo) {
+    
     viewer.context.ifcCamera.cameraControls.setLookAt(centro.x, centro.y+80, centro.z, centro.x, centro.y, centro.z); 
     viewer.context.ifcCamera.toggleProjection();
     
   } else {
     if (posicionInicial) {
-      viewer.context.ifcCamera.cameraControls.setLookAt(posicionInicial.x, posicionInicial.y, posicionInicial.z, 0, 0, 0);
+      viewer.context.ifcCamera.cameraControls.setLookAt(posicionInicial.x, posicionInicial.y, posicionInicial.z, centro.x, centro.y, centro.z);
       viewer.context.ifcCamera.toggleProjection();
       posicionInicial=null;
     }
   }
 }
+
+// async function generatePlanta2D(plantaActivo, planSeleccionado) {
+//   // Asegúrate de que planSeleccionado sea el plano que quieres mostrar en vista 2D
+
+//   if (plantaActivo && planSeleccionado) {
+//     const lineMaterial = new LineBasicMaterial({ color: 'black' });
+//     const baseMaterial = new MeshBasicMaterial({
+//       color: 'white', // Establece el fondo blanco u otro color deseado
+//       polygonOffset: true,
+//       polygonOffsetFactor: 1,
+//       polygonOffsetUnits: 1,
+//     });
+//     await viewer.edges.create('example', model.modelID, lineMaterial, baseMaterial);
+//     // Carga el plano seleccionado en la vista 2D
+//     await viewer.plans.goTo(model.modelID, planSeleccionado);
+   
+//     viewer.context.ifcCamera.toggleProjection();
+//   } else {
+//     // Asegúrate de tener una lógica adecuada para volver a la vista 3D si es necesario
+//     viewer.context.ifcCamera.toggleProjection();
+//   }
+// }
+
 
 // TODO: Fantasma, visualiza modelo translucido completo
 const ifcCompletoButton = document.getElementById('btn-ifc-completo');
