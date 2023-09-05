@@ -457,8 +457,9 @@ canvas {
 #loader-button {
   position: fixed;
   top: 0.3rem; /* ajusta la posición vertical */
-  left: 0.3rem; /* ajusta la posición horizontal */
+  left:0.3rem; /* ajusta la posición horizontal */
   z-index: 999;
+  
 }
 
 /*contenedor botones de planos*/

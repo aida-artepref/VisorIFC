@@ -87,8 +87,6 @@ GUI.loaderArteTipos.onclick = () => GUI.inputArteTipos.click()
 GUI.loaderExt.onclick = () => GUI.inputExt.click();
 //GUI.loaderExt.addEventListener('click', toggleFullScreen);
 
-
-
 //cada vez elemento imput cambia, genera uURL y lo pasa a la lib IFC
 GUI.input.onchange = async (event) => {
     const file=event.target.files[0];
@@ -107,11 +105,11 @@ GUI.inputArteTipos.onchange = async (event) => {
   const url=URL.createObjectURL(file);
   loadModelArteTipos(url); 
 }
+
 let allPlans;
 let model;
 let allIDs;
 let idsTotal;
-
 
 let uniqueTypes=[];
 let precastElements=[];
@@ -232,7 +230,7 @@ function visibleToolbar(){
   toolbarElement.style.visibility = 'visible';
 }
 
-// TODO: -------------- carga modelo ArtePref y crea array precastElements --------------------------------------------
+// TODO: -------------- carga modelo ArtePref con mucha informacion y crea array precastElements --------------------------------------------
 async function createPrecastElementsArray(modelID){
   const ifcProject = await viewer.IFC.getSpatialStructure (modelID);
   
@@ -455,7 +453,6 @@ function addCheckboxListeners() {
   });
 }
 
-
 async function generateLabels(expressIDs) {
   for (const expressID of expressIDs) {
     let ART_Pieza, ART_CoordX, ART_CoordY, ART_CoordZ;
@@ -477,10 +474,11 @@ async function generateLabels(expressIDs) {
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
   //******************************************************************************************************************* */
  /// ---------------estas tres funciones son necesarias para obtener solo las categorias de IFC cargado------------------------
  //-------------extrae todos los tipos de elementos del modelo y los agrupa en un objeto llamado categorias.
- function setIfcPropertiesContent(ifcProject, viewer, model) {
+function setIfcPropertiesContent(ifcProject, viewer, model) {
   const ifcClass = getIfcClass(ifcProject);
   let uniqueClasses = [...new Set(ifcClass)];
   const checkboxesHTML = generateCheckboxesExt(uniqueClasses);
@@ -734,7 +732,7 @@ function muestraNombrePieza(ART_Pieza, ART_CoordX, ART_CoordY, ART_CoordZ, expre
   }
 }
 
-function hideAllItems(viewer, ids) {
+function hideAllItemsFor(viewer, ids) {
 	ids.forEach(function(id) {
         viewer.IFC.loader.ifcManager.removeFromSubset(
             0,
@@ -742,7 +740,14 @@ function hideAllItems(viewer, ids) {
             'full-model-subset',
         );
     }); 
-    
+}
+
+function hideAllItems(viewer, ids) {
+  viewer.IFC.loader.ifcManager.removeFromSubset(
+      0,
+      ids,
+      'full-model-subset',
+  );
 }
 function showAllItems(viewer, ids) {
 	viewer.IFC.loader.ifcManager.createSubset({
@@ -886,21 +891,7 @@ modelCopyCompleto = new Mesh(model.geometry, materialSolid);
 }
 
 
-// TODO: Corte Seccion en el modelo
-const cutButton = document.getElementById('btn-lateral-seccion');
-let cutActive = false;
-cutButton.onclick = () => {
-  
-    if(cutActive) {
-        cutActive = !cutActive;
-        cutButton.classList.remove('active');
-        viewer.clipper.deleteAllPlanes();
-    } else {
-        cutActive = !cutActive;
-        cutButton.classList.add('active');
-        viewer.clipper.active = cutActive;
-    };
-};
+
 
 //TODO: Medir el modelo
 const measureButton = document.getElementById('btn-lateral-medir');
@@ -919,16 +910,154 @@ measureButton.onclick = () => {
     };
 };
 
-//TODO: cortar y medir
-window.onclick = async () => {
-  if(cutActive) {
-      viewer.clipper.createPlane();
-  }else if (measuresActive){
-      viewer.dimensions.create();
+// TODO: Corte Seccion en el modelo
+// const cutButton = document.getElementById('btn-lateral-seccion');
+// let cutActive = false;
+// cutButton.onclick = () => {
+  
+//     if(cutActive) {
+//         cutActive = !cutActive;
+//         cutButton.classList.remove('active');
+//         viewer.clipper.deleteAllPlanes();
+//     } else {
+//         cutActive = !cutActive;
+//         cutButton.classList.add('active');
+//         viewer.clipper.active = cutActive;
+        
+//     };
+// };
+
+// //TODO: cortar y medir
+// container.addEventListener("mousedown", async () => {
+//   if(cutActive) {
+//     const found = await viewer.IFC.selector.pickIfcItem(false);
+//     viewer.IFC.selector.unpickIfcItems();
+//   // console.log("found", JSON.stringify(found));
+  
+//       if (found !== null && found !== undefined) {
+//         viewer.clipper.createPlane();
+//         const ifcPlane  = viewer.clipper.planes[viewer.clipper.planes.length-1]
+//         //console.log(ifcPlane);
+//         if(ifcPlane.normal.y === 1){
+//           ifcPlane.normal.y = -1;
+//         }
+//         if(ifcPlane.normal.x === 1){
+//           ifcPlane.normal.x = -1;
+//         }
+//         if(ifcPlane.normal.z === 1){
+//           ifcPlane.normal.z = -1;
+//         }
+//       }
+  
+//   } if (measuresActive){
+//       viewer.dimensions.create();
+//   }
+// });
+
+// const cutButton = document.getElementById('btn-lateral-seccion');
+// let cutActive = false;
+// let isPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte
+
+// cutButton.onclick = () => {
+//   if (cutActive) {
+//     cutActive = !cutActive;
+//     cutButton.classList.remove('active');
+//     viewer.clipper.deleteAllPlanes();
+//     isPlaneCreated = false; 
+//   } else {
+//     cutActive = !cutActive;
+//     cutButton.classList.add('active');
+//     viewer.clipper.active = cutActive;
+//   }
+// };
+
+// // TODO: cortar y medir
+// container.addEventListener("mousedown", async () => {
+//   if (cutActive && !isPlaneCreated) { // Verificar si está activo el modo de corte y no se ha creado un plano
+//     const found = await viewer.IFC.selector.pickIfcItem(false);
+//     viewer.IFC.selector.unpickIfcItems();
+  
+//     if (found !== null && found !== undefined) {
+//       viewer.clipper.createPlane();
+//       const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
+  
+//       if(ifcPlane.normal.y === 1){
+//           ifcPlane.normal.y = -1;
+//       }
+//       if(ifcPlane.normal.x === 1){
+//           ifcPlane.normal.x = -1;
+//       }
+//       if(ifcPlane.normal.z === 1){
+//           ifcPlane.normal.z = -1;
+//       }
+//       isPlaneCreated = true; 
+//     }
+//   }
+//   if (measuresActive) {
+//     viewer.dimensions.create();
+//   }
+// });
+const cutButton = document.getElementById('btn-lateral-seccion');
+let cutActive = false;
+let isXPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje X
+let isYPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje Y
+let isZPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje Z
+
+cutButton.onclick = () => {
+  if (cutActive) {
+    cutActive = !cutActive;
+    cutButton.classList.remove('active');
+    viewer.clipper.deleteAllPlanes();
+    isXPlaneCreated = false; // Restablecer las variables cuando se borran los planos
+    isYPlaneCreated = false;
+    isZPlaneCreated = false;
+  } else {
+    cutActive = !cutActive;
+    cutButton.classList.add('active');
+    viewer.clipper.active = cutActive;
   }
 };
 
+// TODO: cortar y medir
+container.addEventListener("mousedown", async () => {
+  if (cutActive) { // Verificar si está activo el modo de corte
+    const found = await viewer.IFC.selector.pickIfcItem(false);
+    viewer.IFC.selector.unpickIfcItems();
+  
+    if (found !== null && found !== undefined) {
+      // Verificar si ya se ha creado un plano de corte en el eje X
+      if (!isXPlaneCreated) {
+       creaPlano();
+        isXPlaneCreated = true; // Marcar que se ha creado un plano de corte en el eje X
+      } else if (!isYPlaneCreated) {
+        creaPlano();
+        isYPlaneCreated = true;
+      } else if (!isZPlaneCreated) {
+        creaPlano();
+        isXPlaneCreated = true;
+      }
+    }
+  }
+  if (measuresActive) {
+    viewer.dimensions.create();
+  }
+});
 
+function creaPlano(){
+
+viewer.clipper.createPlane();
+        const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
+  
+        if (ifcPlane.normal.y === 1) {
+          ifcPlane.normal.y = -1;
+        }
+        if (ifcPlane.normal.x === 1) {
+          ifcPlane.normal.x = -1;
+        }
+        if (ifcPlane.normal.z === 1) {
+          ifcPlane.normal.z = -1;
+        }
+}
 // TODO: obtener plantas con sus elementos en modelo ArteP
 let floorplansActive = false;
 const floorplanButton = document.getElementById('btn-lateral-plantas');
