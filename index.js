@@ -782,39 +782,48 @@ const inputText = document.querySelector("#inputARTP input[type='text']");
 const checkBox = document.getElementById('checkLabels'); 
 const infoBusquedas = document.getElementById("infoBusquedas");
 btnBuscar.onclick= () => {
-  if(propActive){
-    propActive=!propActive;
-    btnBuscar.classList.remove('active');
-    const propiedadesContainer = document.getElementById('propiedades-container');
-    propiedadesContainer.innerHTML = '';
-    viewer.IFC.selector.unpickIfcItems();
-    divInputText.style.display = "none";
-    inputText.value="";
-    hideAllItems(viewer, idsTotal);
-    showAllItems(viewer, allIDs);
-    ocultarLabels();
-    expressIDsInput=[];
-        numBusquedas=0;
-        infoBusquedas.querySelector("p").textContent = "";
-        if (listaElementosEncontrados) {
-            infoBusquedas.removeChild(listaElementosEncontrados);
-            listaElementosEncontrados = null;
-            scene.remove(modelCopyCompleto); 
-        }
-        return;
-  }else {
-    propActive=!propActive;
-    btnBuscar.classList.add('active');
-    divInputText.style.display = "block";
-    inputText.focus();
 
-    // compruebasi existen botones activos en divNumCamiones
-    const divNumCamiones = document.getElementById('divNumCamiones');
-    const activeButtons = divNumCamiones.querySelectorAll('.active');
-    activeButtons.forEach(button => {
-      button.click(); 
-    });
+  viewer.context.ifcCamera.toggleProjection();
+  if(propActive){
+    btnBuscar.classList.remove('active');
+    propActive= false;
+  }else{
+    btnBuscar.classList.add('active');
+    propActive= true;
   }
+  // if(propActive){
+  //   propActive=!propActive;
+  //   btnBuscar.classList.remove('active');
+  //   const propiedadesContainer = document.getElementById('propiedades-container');
+  //   propiedadesContainer.innerHTML = '';
+  //   viewer.IFC.selector.unpickIfcItems();
+  //   divInputText.style.display = "none";
+  //   inputText.value="";
+  //   hideAllItems(viewer, idsTotal);
+  //   showAllItems(viewer, allIDs);
+  //   ocultarLabels();
+  //   expressIDsInput=[];
+  //       numBusquedas=0;
+  //       infoBusquedas.querySelector("p").textContent = "";
+  //       if (listaElementosEncontrados) {
+  //           infoBusquedas.removeChild(listaElementosEncontrados);
+  //           listaElementosEncontrados = null;
+  //           scene.remove(modelCopyCompleto); 
+  //       }
+  //       return;
+  // }else {
+  //   propActive=!propActive;
+  //   btnBuscar.classList.add('active');
+  //   divInputText.style.display = "block";
+  //   inputText.focus();
+
+  //   // compruebasi existen botones activos en divNumCamiones
+  //   const divNumCamiones = document.getElementById('divNumCamiones');
+  //   const activeButtons = divNumCamiones.querySelectorAll('.active');
+  //   activeButtons.forEach(button => {
+  //     button.click(); 
+  //   });
+  // }
 }
 
 let numBusquedas = 0;
@@ -910,93 +919,6 @@ measureButton.onclick = () => {
     };
 };
 
-// TODO: Corte Seccion en el modelo
-// const cutButton = document.getElementById('btn-lateral-seccion');
-// let cutActive = false;
-// cutButton.onclick = () => {
-  
-//     if(cutActive) {
-//         cutActive = !cutActive;
-//         cutButton.classList.remove('active');
-//         viewer.clipper.deleteAllPlanes();
-//     } else {
-//         cutActive = !cutActive;
-//         cutButton.classList.add('active');
-//         viewer.clipper.active = cutActive;
-        
-//     };
-// };
-
-// //TODO: cortar y medir
-// container.addEventListener("mousedown", async () => {
-//   if(cutActive) {
-//     const found = await viewer.IFC.selector.pickIfcItem(false);
-//     viewer.IFC.selector.unpickIfcItems();
-//   // console.log("found", JSON.stringify(found));
-  
-//       if (found !== null && found !== undefined) {
-//         viewer.clipper.createPlane();
-//         const ifcPlane  = viewer.clipper.planes[viewer.clipper.planes.length-1]
-//         //console.log(ifcPlane);
-//         if(ifcPlane.normal.y === 1){
-//           ifcPlane.normal.y = -1;
-//         }
-//         if(ifcPlane.normal.x === 1){
-//           ifcPlane.normal.x = -1;
-//         }
-//         if(ifcPlane.normal.z === 1){
-//           ifcPlane.normal.z = -1;
-//         }
-//       }
-  
-//   } if (measuresActive){
-//       viewer.dimensions.create();
-//   }
-// });
-
-// const cutButton = document.getElementById('btn-lateral-seccion');
-// let cutActive = false;
-// let isPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte
-
-// cutButton.onclick = () => {
-//   if (cutActive) {
-//     cutActive = !cutActive;
-//     cutButton.classList.remove('active');
-//     viewer.clipper.deleteAllPlanes();
-//     isPlaneCreated = false; 
-//   } else {
-//     cutActive = !cutActive;
-//     cutButton.classList.add('active');
-//     viewer.clipper.active = cutActive;
-//   }
-// };
-
-// // TODO: cortar y medir
-// container.addEventListener("mousedown", async () => {
-//   if (cutActive && !isPlaneCreated) { // Verificar si está activo el modo de corte y no se ha creado un plano
-//     const found = await viewer.IFC.selector.pickIfcItem(false);
-//     viewer.IFC.selector.unpickIfcItems();
-  
-//     if (found !== null && found !== undefined) {
-//       viewer.clipper.createPlane();
-//       const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
-  
-//       if(ifcPlane.normal.y === 1){
-//           ifcPlane.normal.y = -1;
-//       }
-//       if(ifcPlane.normal.x === 1){
-//           ifcPlane.normal.x = -1;
-//       }
-//       if(ifcPlane.normal.z === 1){
-//           ifcPlane.normal.z = -1;
-//       }
-//       isPlaneCreated = true; 
-//     }
-//   }
-//   if (measuresActive) {
-//     viewer.dimensions.create();
-//   }
-// });
 const cutButton = document.getElementById('btn-lateral-seccion');
 let cutActive = false;
 let isXPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje X
@@ -1027,14 +949,17 @@ container.addEventListener("mousedown", async () => {
     if (found !== null && found !== undefined) {
       // Verificar si ya se ha creado un plano de corte en el eje X
       if (!isXPlaneCreated) {
-       creaPlano();
+        viewer.clipper.createPlane();
+        cambiaDirCorte();
         isXPlaneCreated = true; // Marcar que se ha creado un plano de corte en el eje X
-      } else if (!isYPlaneCreated) {
-        creaPlano();
+      }  if (!isYPlaneCreated) {
+        viewer.clipper.createPlane();
+        cambiaDirCorte();
         isYPlaneCreated = true;
-      } else if (!isZPlaneCreated) {
-        creaPlano();
-        isXPlaneCreated = true;
+      }  if (!isZPlaneCreated) {
+        viewer.clipper.createPlane();
+        cambiaDirCorte();
+        isZPlaneCreated = true;
       }
     }
   }
@@ -1043,10 +968,9 @@ container.addEventListener("mousedown", async () => {
   }
 });
 
-function creaPlano(){
+function cambiaDirCorte(){
 
-viewer.clipper.createPlane();
-        const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
+const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
   
         if (ifcPlane.normal.y === 1) {
           ifcPlane.normal.y = -1;
@@ -1058,6 +982,7 @@ viewer.clipper.createPlane();
           ifcPlane.normal.z = -1;
         }
 }
+
 // TODO: obtener plantas con sus elementos en modelo ArteP
 let floorplansActive = false;
 const floorplanButton = document.getElementById('btn-lateral-plantas');
@@ -1089,7 +1014,11 @@ floorplanButton.onclick = () => {
     botonesPlantasExt.style.visibility="hidden"
   }
   if(floorplansActive ) {
-    checkboxContainer.style.visibility = 'visible';
+    if(btnArtIfc.style.display==='none'){
+      checkboxContainer.style.visibility = 'hiden';
+    }else{
+      checkboxContainer.style.visibility = 'visible';
+    }
     marcarCheckboxes();
     floorplansActive = !floorplansActive;
     floorplanButton.classList.remove('active');
@@ -1154,9 +1083,9 @@ async function getPlantasExt(){
 
 	const container = document.getElementById('button-container');
   container.style.visibility='visible'
-   container.innerHTML = '';
+  container.innerHTML = '';
 
-   for (const plan of allPlans) {
+  for (const plan of allPlans) {
     const currentPlan = viewer.plans.planLists[model.modelID][plan];
     const button = document.createElement('button');
     container.appendChild(button);
@@ -1382,7 +1311,6 @@ async function getPlantas(model) {
             z: camera.position.z
           };
         }
-       
         generatePlanta2D(plantaActivo);
       }
     };
