@@ -1011,9 +1011,9 @@ container.addEventListener("mousedown", async () => {
         planoCorteCont++
       }
     }
-    if (measuresActive) {
+  }
+  if (measuresActive) {
       viewer.dimensions.create();
-    }
   }
 });
 
@@ -1132,9 +1132,9 @@ async function getPlantasExt(){
 
 	const container = document.getElementById('button-container');
   container.style.visibility='visible'
-   container.innerHTML = '';
+  container.innerHTML = '';
 
-   for (const plan of allPlans) {
+  for (const plan of allPlans) {
     const currentPlan = viewer.plans.planLists[model.modelID][plan];
     const button = document.createElement('button');
     container.appendChild(button);
