@@ -423,35 +423,219 @@ function removeLabels(expressIDs) {
 }
 
 function addCheckboxListeners() {
+  
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach(function(checkbox) {
-      checkbox.addEventListener('change', function() {
-          viewer.IFC.selector.unpickIfcItems();
-          const isChecked = this.checked;
-          const artPieza = this.getAttribute('data-art-pieza');
-          const matchingIds = [];
+    // Crear un contenedor para el checkbox y el icono
+    const container = document.createElement('label');
+    container.className = 'checkbox-container';
 
-          precastElements.forEach(function(element) {
-              if (element.ART_Pieza === 0 || element.ART_Pieza === "0" || element.ART_Pieza === "" || element.ART_Pieza === undefined) {
-                  return;
-              }
+    // Mover el checkbox al contenedor
+    checkbox.parentNode.insertBefore(container, checkbox);
 
-              // Comparar las dos primeras letras de ART_Pieza con artPieza
-              if (element.ART_Pieza.substring(0, artPieza.length).toUpperCase() === artPieza.toUpperCase()) {
-                  if (!element.hasOwnProperty('Camion') || element.Camion === "") {
-                      matchingIds.push(element.expressID);
-                  }
-              }
-          });
+    // Crear un icono de ojo
+    const eyeIcon = document.createElement('span');
+    eyeIcon.className = 'eye-icon';
+    eyeIcon.innerHTML = '👁️'; // Puedes cambiar el contenido a un icono de ojo
+    const artPiezaValue = checkbox.getAttribute('data-art-pieza');
 
-          if (isChecked) {
-              showAllItems(viewer, matchingIds);
-          } else {
-              hideAllItems(viewer, matchingIds);
+    // Establecer el atributo data-art-pieza-ojo en el elemento span
+    eyeIcon.setAttribute('data-art-pieza-ojo', artPiezaValue);
+
+    // Agregar el icono de ojo al contenedor
+    container.appendChild(eyeIcon);
+
+    checkbox.addEventListener('change', function() {
+      viewer.IFC.selector.unpickIfcItems();
+      const isChecked = this.checked;
+      const artPieza = this.getAttribute('data-art-pieza');
+      const matchingIds = [];
+
+      precastElements.forEach(function(element) {
+        if (element.ART_Pieza === 0 || element.ART_Pieza === "0" || element.ART_Pieza === "" || element.ART_Pieza === undefined) {
+          return;
+        }
+
+        // Comparar las dos primeras letras de ART_Pieza con artPieza
+        if (element.ART_Pieza.substring(0, artPieza.length).toUpperCase() === artPieza.toUpperCase()) {
+          if (!element.hasOwnProperty('Camion') || element.Camion === "") {
+            matchingIds.push(element.expressID);
           }
+        }
       });
+
+      if (isChecked) {
+        showAllItems(viewer, matchingIds);
+      } else {
+        hideAllItems(viewer, matchingIds);
+      }
+    });
+    const eyeIcons = document.querySelectorAll('.eye-icon');
+    let activeIcon = null;
+    
+    eyeIcons.forEach(function (icon) {
+      icon.addEventListener('click', function () {
+        if (activeIcon === icon) {
+          icon.classList.remove('active-ojo');
+          marcarCheckboxes();
+          hideAllItems(viewer, allIDs);
+          showAllItems(viewer, allIDs);
+          activeIcon = null;
+        } else {
+          if (activeIcon) {
+            activeIcon.classList.remove('active-ojo');
+          }
+          icon.classList.add('active-ojo');
+          activeIcon = icon;
+    
+          const artPiezaOjoValue = icon.getAttribute('data-art-pieza-ojo');
+          const expressOjo = [];
+    
+          precastElements.forEach(function (element) {
+            if (element.ART_Pieza === 0 || element.ART_Pieza === "0" || element.ART_Pieza === "" || element.ART_Pieza === undefined) {
+              return;
+            }
+            
+            if (element.ART_Pieza.substring(0, artPiezaOjoValue.length).toUpperCase() === artPiezaOjoValue.toUpperCase()) {
+              if (!element.hasOwnProperty('Camion') || element.Camion === "") {
+                expressOjo.push(element.expressID);
+              }
+            }
+          });
+          // Mostrar solo los elementos relacionados con el icono de ojo clicado
+          hideAllItems(viewer, allIDs);
+          showAllItems(viewer, expressOjo);
+        }
+      });
+    });
+    
   });
 }
+
+function addCheckboxListenersExt() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const allIcons = []; 
+
+  checkboxes.forEach(function (checkbox) {
+    const container = document.createElement('label');
+    container.className = 'checkbox-container';
+    checkbox.parentNode.insertBefore(container, checkbox);
+
+    const icon = document.createElement('span');
+    icon.className = 'eye-icon2';
+    icon.innerHTML = '👁️'; 
+    icon.setAttribute('data-class', checkbox.getAttribute('data-class'));
+    
+    container.appendChild(icon);
+    allIcons.push(icon);
+
+    checkbox.addEventListener('change', function () {
+      viewer.IFC.selector.unpickIfcItems();
+      const isChecked = this.checked;
+      const tipo = this.getAttribute('data-class');
+      const matchingIds = [];
+
+      for (let i = 0; i < precastElements.length; i++) {
+        const element = precastElements[i];
+        if (element.ifcType === tipo) {
+          matchingIds.push(element.expressID);
+        }
+      }
+
+      if (isChecked) {
+        showAllItems(viewer, matchingIds);
+        
+        allIcons.forEach(function (otherIcon) {// Desactivar todos los iconos excepto el actual
+          if (otherIcon !== icon) {
+            otherIcon.classList.remove('active-icon');
+          }
+        });
+        icon.classList.add('active-icon');
+      } else {
+        hideAllItems(viewer, matchingIds);
+        // Cuando se desactive el checkbox, también se desactiva el icono
+        icon.classList.remove('active-icon');
+      }
+
+    });
+
+    const eyeIcons = document.querySelectorAll('.eye-icon2');
+    let activeIcon = null;
+    
+    eyeIcons.forEach(function (icon) {
+      icon.addEventListener('click', function () {
+        if (activeIcon === icon) {
+          icon.classList.remove('active-ojo');
+          hideAllItems(viewer, allIDs);
+          showAllItems(viewer, allIDs);
+          activeIcon = null;
+          const activeEyeIcon = document.querySelector('.eye-icon2.active-ojo');
+          if (!activeEyeIcon) {
+            checkboxes.forEach(function (cb) {
+              cb.disabled = false;
+            });
+            console.log('Checkboxes enabled');
+
+            let expressCheck=expressCheckActivos();
+            hideAllItems(viewer, allIDs);
+            showAllItems(viewer, expressCheck);
+          }
+        } else {
+          if (activeIcon) {
+            activeIcon.classList.remove('active-ojo');
+          }
+          icon.classList.add('active-ojo');
+          activeIcon = icon;
+    
+          const artPiezaOjoValue = icon.getAttribute('data-class');
+          const expressOjo = [];
+          for (let i = 0; i < precastElements.length; i++) {
+            const element = precastElements[i];
+            if (element.ifcType === artPiezaOjoValue) {
+              expressOjo.push(element.expressID);
+            }
+          }
+
+          hideAllItems(viewer, allIDs);
+          showAllItems(viewer, expressOjo);
+          const activeEyeIcon = document.querySelector('.eye-icon2.active-ojo');
+          if (activeEyeIcon) {
+            // Si hay un icono ojo activo, desactivar todos los checkboxes
+            checkboxes.forEach(function (cb) {
+              cb.disabled = true;
+            });
+          } 
+        }
+      });
+    });
+
+  });
+}
+
+
+function expressCheckActivos() {
+  const divChecktiposIfc = document.getElementById('checktiposIfc');
+
+  if (divChecktiposIfc) {
+    const checkboxes = divChecktiposIfc.querySelectorAll('input[type="checkbox"]');
+    const matchingExpress = [];
+
+    checkboxes.forEach(function (checkbox) {
+      if (checkbox.checked) {
+        const dataClassValue = checkbox.getAttribute('data-class');
+
+        for (let i = 0; i < precastElements.length; i++) {
+          const element = precastElements[i];
+          if (element.ifcType === dataClassValue) {
+            matchingExpress.push(element.expressID);
+          }
+        }
+      }
+    });
+    return matchingExpress;
+  }
+}
+
 
 async function generateLabels(expressIDs) {
   for (const expressID of expressIDs) {
@@ -532,31 +716,6 @@ function generateCheckboxesExt(uniqueClasses) {
   return html;
 }
 
-//evento cambio en los checK tipos de elementos
-function addCheckboxListenersExt() {
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(function(checkbox) {
-      checkbox.addEventListener('change', function() {
-          viewer.IFC.selector.unpickIfcItems();
-          const isChecked = this.checked;
-          const tipo = this.getAttribute('data-class');
-          const matchingIds = [];
-          for (let i = 0; i < precastElements.length; i++) {
-              const element = precastElements[i];
-              if (element.ifcType === tipo) {
-                  matchingIds.push(element.expressID);
-              }
-          }
-          if (isChecked) { 
-              showAllItems(viewer, matchingIds);
-          } else {
-              hideAllItems(viewer, matchingIds);
-          }
-      });
-      
-  });
-  
-}
 
 
 //TODO todosIDS, creaSUBSET************************************************************************************************************
