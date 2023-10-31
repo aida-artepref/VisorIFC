@@ -297,6 +297,14 @@ canvas {
   margin-top: 5px; 
 }
 
+.active-ojo{
+  transform: scale(1.2); /* Escala el elemento al 120% de su tamaño original */
+  transition: transform 0.2s; 
+  background: var(--orange) ;
+  border-inline: solid 1px black;
+  border-radius: 5px;
+}
+
 .activo {
   padding: 0.7rem;
   font-size: 12px;
@@ -628,4 +636,24 @@ element.style {
   height: auto; 
   z-index:9; 
   border-radius: 5px;
+}
+/* 
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+} */
+
+.eye-icon {
+  font-size: 20px; /* Tamaño del icono del ojo */
+
+  cursor: pointer;
+  margin-right: -5px;
+}
+
+.eye-icon2 {
+  font-size: 20px; /* Tamaño del icono del ojo */
+
+  cursor: pointer;
+ .
 }
