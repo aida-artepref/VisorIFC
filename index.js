@@ -1136,7 +1136,7 @@ floorplanButton.onclick = () => {
 
     floorplansButtonContainer.style.visibility = 'hidden';
 
-    checkboxContainerTipos.style.visibility="visible"
+    //checkboxContainerTipos.style.visibility="visible"
 
     //desactiva los botones de plantas cuando se apaga el boton que genera los planos
     const containerForButtons = document.getElementById('button-container');
