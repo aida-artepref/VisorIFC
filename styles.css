@@ -637,23 +637,15 @@ element.style {
   z-index:9; 
   border-radius: 5px;
 }
-/* 
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-} */
 
 .eye-icon {
-  font-size: 20px; /* Tamaño del icono del ojo */
-
+  font-size: 20px; 
   cursor: pointer;
-  margin-right: -5px;
+  margin-left: 5px;
 }
 
 .eye-icon2 {
-  font-size: 20px; /* Tamaño del icono del ojo */
-
+  font-size: 20px; 
   cursor: pointer;
   margin-right: 15px;
 }

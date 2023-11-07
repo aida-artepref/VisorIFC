@@ -891,16 +891,6 @@ function muestraNombrePieza(ART_Pieza, ART_CoordX, ART_CoordY, ART_CoordZ, expre
   }
 }
 
-function hideAllItemsFor(viewer, ids) {
-	ids.forEach(function(id) {
-        viewer.IFC.loader.ifcManager.removeFromSubset(
-            0,
-            [id],
-            'full-model-subset',
-        );
-    }); 
-}
-
 function hideAllItems(viewer, ids) {
   viewer.IFC.loader.ifcManager.removeFromSubset(
       0,
@@ -953,7 +943,6 @@ btnBuscar.onclick= () => {
   }
 
 }
-
 let numBusquedas = 0;
 let expressIDsInput;
 let listaElementosEncontrados = null;
@@ -1027,9 +1016,6 @@ modelCopyCompleto = new Mesh(model.geometry, materialSolid);
         scene.add(modelCopyCompleto);
 }
 
-
-
-
 //TODO: Medir el modelo
 const measureButton = document.getElementById('btn-lateral-medir');
 let measuresActive = false;
@@ -1047,105 +1033,18 @@ measureButton.onclick = () => {
     };
 };
 
-// TODO: Corte Seccion en el modelo
-// const cutButton = document.getElementById('btn-lateral-seccion');
-// let cutActive = false;
-// cutButton.onclick = () => {
-  
-//     if(cutActive) {
-//         cutActive = !cutActive;
-//         cutButton.classList.remove('active');
-//         viewer.clipper.deleteAllPlanes();
-//     } else {
-//         cutActive = !cutActive;
-//         cutButton.classList.add('active');
-//         viewer.clipper.active = cutActive;
-        
-//     };
-// };
-
-// //TODO: cortar y medir
-// container.addEventListener("mousedown", async () => {
-//   if(cutActive) {
-//     const found = await viewer.IFC.selector.pickIfcItem(false);
-//     viewer.IFC.selector.unpickIfcItems();
-//   // console.log("found", JSON.stringify(found));
-  
-//       if (found !== null && found !== undefined) {
-//         viewer.clipper.createPlane();
-//         const ifcPlane  = viewer.clipper.planes[viewer.clipper.planes.length-1]
-//         //console.log(ifcPlane);
-//         if(ifcPlane.normal.y === 1){
-//           ifcPlane.normal.y = -1;
-//         }
-//         if(ifcPlane.normal.x === 1){
-//           ifcPlane.normal.x = -1;
-//         }
-//         if(ifcPlane.normal.z === 1){
-//           ifcPlane.normal.z = -1;
-//         }
-//       }
-  
-//   } if (measuresActive){
-//       viewer.dimensions.create();
-//   }
-// });
-
-// const cutButton = document.getElementById('btn-lateral-seccion');
-// let cutActive = false;
-// let isPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte
-
-// cutButton.onclick = () => {
-//   if (cutActive) {
-//     cutActive = !cutActive;
-//     cutButton.classList.remove('active');
-//     viewer.clipper.deleteAllPlanes();
-//     isPlaneCreated = false; 
-//   } else {
-//     cutActive = !cutActive;
-//     cutButton.classList.add('active');
-//     viewer.clipper.active = cutActive;
-//   }
-// };
-
-// // TODO: cortar y medir
-// container.addEventListener("mousedown", async () => {
-//   if (cutActive && !isPlaneCreated) { // Verificar si está activo el modo de corte y no se ha creado un plano
-//     const found = await viewer.IFC.selector.pickIfcItem(false);
-//     viewer.IFC.selector.unpickIfcItems();
-  
-//     if (found !== null && found !== undefined) {
-//       viewer.clipper.createPlane();
-//       const ifcPlane = viewer.clipper.planes[viewer.clipper.planes.length - 1];
-  
-//       if(ifcPlane.normal.y === 1){
-//           ifcPlane.normal.y = -1;
-//       }
-//       if(ifcPlane.normal.x === 1){
-//           ifcPlane.normal.x = -1;
-//       }
-//       if(ifcPlane.normal.z === 1){
-//           ifcPlane.normal.z = -1;
-//       }
-//       isPlaneCreated = true; 
-//     }
-//   }
-//   if (measuresActive) {
-//     viewer.dimensions.create();
-//   }
-// });
 const cutButton = document.getElementById('btn-lateral-seccion');
 let cutActive = false;
-let isXPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje X
-let isYPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje Y
-let isZPlaneCreated = false; // Variable para rastrear si ya se ha creado un plano de corte en el eje Z
+let isXPlaneCreated = false;
+let isYPlaneCreated = false; 
+let isZPlaneCreated = false; 
 
 cutButton.onclick = () => {
   if (cutActive) {
     cutActive = !cutActive;
     cutButton.classList.remove('active');
     viewer.clipper.deleteAllPlanes();
-    isXPlaneCreated = false; // Restablecer las variables cuando se borran los planos
+    isXPlaneCreated = false; 
     isYPlaneCreated = false;
     isZPlaneCreated = false;
     planoCorteCont=0;
@@ -1201,6 +1100,9 @@ const btnArtIfc = document.getElementById('loader-button');
 const checkboxContainerTipos = document.getElementById('checktiposIfc');
 
 floorplanButton.onclick = () => {
+  if (btnMuestraCheckElementos.classList.contains('active')) {
+    btnMuestraCheckElementos.click();
+  }
   if (checkboxContainerTipos.style.display !== "none") {  // Oculta el elemento filtrar en los checkBox
     checkboxContainerTipos.style.visibility="hidden"
   }
@@ -1226,7 +1128,7 @@ floorplanButton.onclick = () => {
     botonesPlantasExt.style.visibility="hidden"
   }
   if(floorplansActive ) {
-    checkboxContainer.style.visibility = 'visible';
+    checkboxContainer.style.visibility = 'hidden';
     marcarCheckboxes();
     floorplansActive = !floorplansActive;
     floorplanButton.classList.remove('active');
@@ -1556,6 +1458,7 @@ async function getPlantas(model) {
 
       // Haz clic en el elemento
       btnLateralPlantas.click();
+      
     };
 }
 
@@ -1612,29 +1515,6 @@ function generatePlanta2D(plantaActivo) {
   }
 }
 
-// async function generatePlanta2D(plantaActivo, planSeleccionado) {
-//   // Asegúrate de que planSeleccionado sea el plano que quieres mostrar en vista 2D
-
-//   if (plantaActivo && planSeleccionado) {
-//     const lineMaterial = new LineBasicMaterial({ color: 'black' });
-//     const baseMaterial = new MeshBasicMaterial({
-//       color: 'white', // Establece el fondo blanco u otro color deseado
-//       polygonOffset: true,
-//       polygonOffsetFactor: 1,
-//       polygonOffsetUnits: 1,
-//     });
-//     await viewer.edges.create('example', model.modelID, lineMaterial, baseMaterial);
-//     // Carga el plano seleccionado en la vista 2D
-//     await viewer.plans.goTo(model.modelID, planSeleccionado);
-   
-//     viewer.context.ifcCamera.toggleProjection();
-//   } else {
-//     // Asegúrate de tener una lógica adecuada para volver a la vista 3D si es necesario
-//     viewer.context.ifcCamera.toggleProjection();
-//   }
-// }
-
-
 // TODO: Fantasma, visualiza modelo translucido completo
 const ifcCompletoButton = document.getElementById('btn-ifc-completo');
 let ifcCompletoActive = false;
@@ -1649,6 +1529,23 @@ ifcCompletoButton.onclick = () => {
     scene.remove(modelCopyCompleto);
   }
 };
+
+
+//btn elementos muestar u oculta div elementos
+const btnMuestraCheckElementos=document.getElementById('btn-ver-elementos');
+const divCheckTiposIfc = document.getElementById('checktiposIfc')
+const divCheckElementos =document.getElementById('checkbox-container') 
+btnMuestraCheckElementos.addEventListener('click', function() {
+  if (btnMuestraCheckElementos.classList.contains('active')) {
+    btnMuestraCheckElementos.classList.remove('active');
+    divCheckTiposIfc.style.visibility='hidden'
+    divCheckElementos.style.visibility='hidden'
+  } else {
+    btnMuestraCheckElementos.classList.add('active');
+    divCheckTiposIfc.style.visibility='visible'
+    divCheckElementos.style.visibility='visible'
+  }
+});
 
 
 
