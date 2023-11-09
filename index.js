@@ -116,6 +116,7 @@ let precastElements=[];
 let subset;
 
 
+
 async function loadModel(url) {
   model = await viewer.IFC.loadIfcUrl(url);
   console.log(model);
@@ -229,6 +230,21 @@ function visibleToolbar(){
   const toolbarElement = document.querySelector('.toolbar');
   toolbarElement.style.visibility = 'visible';
 }
+const rejilla = document.getElementById('btn-ver-rejilla');
+
+function toggleRejilla() {
+    rejilla.classList.toggle('active');
+
+    if (rejilla.classList.contains('active')) {
+        viewer.grid.setGrid(100, 100);
+    } else {
+        viewer.grid.dispose();
+    }
+}
+
+rejilla.addEventListener('click', toggleRejilla);
+
+
 
 // TODO: -------------- carga modelo ArtePref con mucha informacion y crea array precastElements --------------------------------------------
 async function createPrecastElementsArray(modelID){
