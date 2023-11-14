@@ -122582,6 +122582,7 @@ class TextGeometry extends ExtrudeGeometry {
 
 const container = document.getElementById('app');
 const viewer = new IfcViewerAPI({container, backgroundColor: new Color("#E8D5D6")});
+viewer.context.ifcCamera.cameraControls.dampingFactor = 0;
 const scene = viewer.context.scene.scene;
 viewer.clipper.active = true;
 viewer.grid.setGrid(100,100);
