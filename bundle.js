@@ -122583,6 +122583,7 @@ class TextGeometry extends ExtrudeGeometry {
 const container = document.getElementById('app');
 const viewer = new IfcViewerAPI({container, backgroundColor: new Color("#E8D5D6")});
 viewer.context.ifcCamera.cameraControls.dampingFactor = 0;
+viewer.context.renderer.renderer.setPixelRatio( window.devicePixelRatio );
 const scene = viewer.context.scene.scene;
 viewer.clipper.active = true;
 viewer.grid.setGrid(100,100);
@@ -123660,7 +123661,8 @@ document.getElementById('loader-button');
 const checkboxContainerTipos = document.getElementById('checktiposIfc');
 
 floorplanButton.onclick = () => {
-  if (btnMuestraCheckElementos.classList.contains('active')) {
+  // if (btnMuestraCheckElementos.classList.contains('active') && !floorplanButton.classList.contains('active')) {
+  if (btnMuestraCheckElementos.classList.contains('active') ) {
     btnMuestraCheckElementos.click();
   }
   if (checkboxContainerTipos.style.display !== "none") {  // Oculta el elemento filtrar en los checkBox
@@ -124094,14 +124096,33 @@ ifcCompletoButton.onclick = () => {
 const btnMuestraCheckElementos=document.getElementById('btn-ver-elementos');
 const divCheckTiposIfc = document.getElementById('checktiposIfc');
 const divCheckElementos =document.getElementById('checkbox-container'); 
+const btnLoadIfcExt = document.getElementById('loader-button-ext');
+const btnLoadIfcArteTipos = document.getElementById('loader-button-arte-tipos');
+const btnLoadIfcArteMont = document.getElementById('loader-button');
+
 btnMuestraCheckElementos.addEventListener('click', function() {
   if (btnMuestraCheckElementos.classList.contains('active')) {
     btnMuestraCheckElementos.classList.remove('active');
-    divCheckTiposIfc.style.visibility='hidden';
-    divCheckElementos.style.visibility='hidden';
+    if (btnLoadIfcExt.style.display === '') {
+      divCheckTiposIfc.style.visibility='hidden';
+    }
+    if (btnLoadIfcArteTipos.style.display === '') {
+      divCheckTiposIfc.style.visibility='hidden';
+    }
+    if (btnLoadIfcArteMont.style.display === '') {
+      divCheckElementos.style.visibility='hidden';
+    }
+    
   } else {
     btnMuestraCheckElementos.classList.add('active');
-    divCheckTiposIfc.style.visibility='visible';
-    divCheckElementos.style.visibility='visible';
+    if (btnLoadIfcExt.style.display === '') {
+      divCheckTiposIfc.style.visibility='visible';
+    }
+    if (btnLoadIfcArteTipos.style.display === 'none') {
+      divCheckElementos.style.visibility='visible';
+    }
+    if (btnLoadIfcArteMont.style.display === 'none') {
+      divCheckElementos.style.visibility='visible';
+    }
   }
 });

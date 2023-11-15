@@ -473,13 +473,14 @@ canvas {
 /*contenedor botones de planos*/
 #button-container {
   position: fixed;
-  top: 5rem; /* ajusta la posición vertical */
-  left: 1rem; /* ajusta la posición horizontal */
+  top: 5rem;
+  left: 1rem; 
   z-index: 999;
   width: 50px;
   height: 50px;
   visibility: hidden;
 }
+
 
 .additional-button {
   
@@ -489,8 +490,8 @@ canvas {
 
 #botonImportar{
   position: fixed;
-  top: 80px; /* ajusta la posición vertical */
-  left: 20px; /* ajusta la posición horizontal */
+  top: 80px;
+  left: 20px; 
   z-index: 999;
   width: 50px;
   height: 50px;
@@ -576,12 +577,13 @@ canvas {
     position:fixed;
     display: flex;
   flex-direction: column;
-    bottom:50px;
+    bottom:2rem;
     padding: 0.3rem;
     background-color: rgba(255, 255, 255, 0.7);
     margin: 5px;
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.5);
+    right:4rem
   }
   
 
@@ -626,8 +628,8 @@ element.style {
 
 .divCheck {
   position: fixed;
-  bottom: 1rem;
-  left:1rem;
+  bottom: 0.5rem;
+  right:3.5rem;
   background-color:rgba(255, 255, 255, 1);
   border: 1px solid rgb(126, 126, 126);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
