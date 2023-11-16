@@ -1554,6 +1554,7 @@ ifcCompletoButton.onclick = () => {
 const btnMuestraCheckElementos=document.getElementById('btn-ver-elementos');
 const divCheckTiposIfc = document.getElementById('checktiposIfc')
 const divCheckElementos =document.getElementById('checkbox-container') 
+
 const btnLoadIfcExt = document.getElementById('loader-button-ext');
 const btnLoadIfcArteTipos = document.getElementById('loader-button-arte-tipos');
 const btnLoadIfcArteMont = document.getElementById('loader-button');
@@ -1576,10 +1577,10 @@ btnMuestraCheckElementos.addEventListener('click', function() {
     if (btnLoadIfcExt.style.display === '') {
       divCheckTiposIfc.style.visibility='visible'
     }
-    if (btnLoadIfcArteTipos.style.display === 'none') {
-      divCheckElementos.style.visibility='visible'
+    if (btnLoadIfcArteTipos.style.display === '') {
+      divCheckTiposIfc.style.visibility='visible'
     }
-    if (btnLoadIfcArteMont.style.display === 'none') {
+    if (btnLoadIfcArteMont.style.display === '') {
       divCheckElementos.style.visibility='visible'
     }
   }
