@@ -122586,7 +122586,7 @@ viewer.context.ifcCamera.cameraControls.dampingFactor = 0;
 viewer.context.renderer.renderer.setPixelRatio( window.devicePixelRatio );
 const scene = viewer.context.scene.scene;
 viewer.clipper.active = true;
-viewer.grid.setGrid(100,100);
+viewer.grid.setGrid(400,400);
 
 
 const labelRenderer = new CSS2DRenderer();
@@ -122608,6 +122608,7 @@ document.addEventListener("keydown", function(event) {
 
 viewer.context.renderer.usePostproduction = true;
 viewer.IFC.selector.defSelectMat.color = new Color('#d6e500');
+viewer.context.getRenderer().setPixelRatio(window.devicePixelRatio);
 
 const GUI={
     input: document.getElementById("file-input"),
